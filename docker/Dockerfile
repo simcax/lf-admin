@@ -11,6 +11,7 @@ ENV REDIS_PORT=6381
 ENV FLASK_APP=app
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+COPY ./app /app
 COPY ./docker/docker_entrypoint.sh /
 RUN chmod +x /docker_entrypoint.sh
 WORKDIR /
