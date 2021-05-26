@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Tokens{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+Total antal medlemmer: {{ orderedMembers['realMembersCount' ]}}
+<br/>
+Total antal ikke medlemmer: {{ orderedMembers['notRealMembersCount']}}
+<br/>
+Kvinder: {{ orderedMembers['memberStats']['female'] }}
+<br/>
+Mænd: {{ orderedMembers['memberStats']['male'] }}
+{% endblock %}

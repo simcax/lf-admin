@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Members{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+{% if request.url_rule.endpoint == 'accesstokens.membersNoTokens' %}
+    
+    {% for memberId in orderedMembers['realMembersWithoutTokens'] %}
+        {{ orderedMembers['realMembersWithoutTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['LastName'] }}<br/>
+    {% endfor %}
+{% endif %}
+{% if request.url_rule.endpoint == 'accesstokens.membersWithTokens' %}
+    {% for memberId in orderedMembers['realMembersWithTokens'] %}
+    {{ orderedMembers['realMembersWithTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['LastName'] }}<br/>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
