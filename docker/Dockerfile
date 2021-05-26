@@ -3,9 +3,7 @@ RUN apt update
 # Upgrade pip 
 RUN python3 -m pip install --upgrade pip
 RUN python -m venv /venv
-COPY ./afstemning/requirements.txt /
 RUN . venv/bin/activate && python -m pip install psycopg2 && python -m pip install -r requirements.txt
-COPY ./afstemning/app /app
 ENV SESSION_TYPE=redis
 ENV REDIS_HOST=redis-lf-admin
 ENV REDIS_PORT=6381
