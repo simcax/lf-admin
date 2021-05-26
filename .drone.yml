@@ -10,7 +10,7 @@ steps:
     image: plugins/docker
     privileged: true
     settings:
-      tag: 0.0.1
+      tag: 0.0.2
       registry: 10.0.0.5:32000
       repo: 10.0.0.5:32000/lfadmin
       insecure: true
