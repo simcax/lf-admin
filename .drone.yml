@@ -1,0 +1,21 @@
+kind: pipeline
+type: kubernetes
+name: Build LF Admin
+steps:
+  - name: Prepare build LF Admin
+    image: python:3.9.4
+    commands:
+      - cp ./docker/Dockerfile Dockerfile
+  - name: Build and Push LF Admin
+    image: plugins/docker
+    privileged: true
+    settings:
+      tag: $$(DRONE_COMMIT_SHA)
+      registry: 10.0.0.5:32000
+      repo: 10.0.0.5:32000/lfadmin
+      insecure: true
+node_selector:
+  kubernetes.io/hostname: simpi401
+      
+
+
