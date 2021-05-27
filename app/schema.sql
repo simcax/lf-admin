@@ -4,7 +4,7 @@ USE lfadmin;
 DROP TABLE IF EXISTS soc.user;
 
 CREATE USER IF NOT EXISTS lfadminUser;
-GRANT CREATE ON DATABASE voting TO lfadminUser;
+GRANT CREATE ON DATABASE lfadmin TO lfadminUser;
 CREATE SCHEMA soc AUTHORIZATION lfadminUser;
 
 CREATE TABLE soc.user (
