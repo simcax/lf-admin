@@ -12,6 +12,8 @@ import os
 import requests
 import json
 import datetime
+import socket
+hostname = socket.gethostname()
 
 @bp.route('/')
 @login_required
@@ -19,21 +21,21 @@ def index():
     # Get all members
     _membersCached()
     ordered = session['orderedMembers']
-    return render_template('tokens.html', orderedMembers=ordered)
+    return render_template('tokens.html', orderedMembers=ordered, hostname=hostname)
 
 @bp.route('/realmembersnotoken')
 def membersNoTokens():
     # Check if member information has been cached in memory, if not retrieve them
     _membersCached()
     ordered = session['orderedMembers']
-    return render_template('members.html',orderedMembers=ordered)
+    return render_template('members.html',orderedMembers=ordered, hostname=hostname)
 
 @bp.route('/realmemberswithtokens')
 def membersWithTokens():
     # Check if member information has been cached in memory, if not retrieve them
     _membersCached()
     ordered = session['orderedMembers']
-    return render_template('members.html',orderedMembers=ordered)
+    return render_template('members.html',orderedMembers=ordered, hostname=hostname)
 
 def _membersCached():
     if session.get('orderedMembers'):
