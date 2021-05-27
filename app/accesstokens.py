@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 from werkzeug.wrappers import response
 
 from app.auth import login_required
-from app.db import get_db
+from app.db import get_conn
 
 bp = Blueprint('accesstokens', __name__,url_prefix='/tokens')
 import os
