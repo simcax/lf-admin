@@ -2,7 +2,7 @@ import os
 from flask import Flask, session
 from flask_session import Session
 from redis import Redis
-
+from logging.config import dictConfig
 # Create and configure the app
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -18,11 +18,17 @@ SESSION_TYPE = os.environ.get('SESSION_TYPE')
 _REDIS_HOST = os.environ.get('REDIS_HOST')
 _REDIS_PORT = os.environ.get('REDIS_PORT')
 SESSION_REDIS = Redis(host=_REDIS_HOST, port=_REDIS_PORT)
-app.config.update(SECRET_KEY=os.urandom(24))
+#app.config.update(SECRET_KEY=os.urandom(24))
 # Start the server side session
 app.config.from_object(__name__)
+#app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY']=b'_5#y2L"F4Q8z\n\xec]/'
+app.config['SESSION_TYPE']=Redis
+app.config['SESSION_REDIS'] = Redis(host=_REDIS_HOST, port=_REDIS_PORT)
+
 Session(app)
 
+print(app.config.get('SECRET_KEY'))
 
 
 #def create_app(test_config=None):
