@@ -5,11 +5,122 @@
 {% endblock %}
 
 {% block content %}
-Total antal medlemmer: {{ orderedMembers['realMembersCount' ]}}
-<br/>
-Total antal ikke medlemmer: {{ orderedMembers['notRealMembersCount']}}
-<br/>
-Kvinder: {{ orderedMembers['memberStats']['female'] }}
-<br/>
-Mænd: {{ orderedMembers['memberStats']['male'] }}
+<div class="container py-3">
+  <div class="row row-cols-2 row-cols-md-2 mb-2 text-center justify-content-between">
+    <div class="col">
+      <div class="card mb-4 rounded-2 shadow-sm border-info">
+        <div class="card-header py-2 bg-info text-light font-weight-bold">Total antal medlemmer</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['realMembersCount' ]}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success border-info">
+        <div class="card-header py-2 bg-info text-light font-weight-bold">Total antal ikke medlemmer</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['notRealMembersCount' ]}}
+          </h1>
+        </div>
+      </div>
+
+    </div>
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-danger">
+        <div class="card-header py-2 bg-danger text-light font-weight-bold">Kvinder</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['memberGender']['female']}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-primary">
+        <div class="card-header py-2 bg-primary text-light font-weight-bold">Mænd</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['memberGender']['male']}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 bg-success text-light font-weight-bold">Nye medlemmer sidste måned</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['interestingNumbers']['lastMonthMembers']}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 bg-success text-light font-weight-bold">Nye medlemmer denne måned</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            {{ orderedMembers['interestingNumbers']['currentMonthMembers']}}
+          </h1>
+        </div>
+      </div>
+    </div>
+    
+  </div><!-- END ROW -->
+  <div class="row row-cols-1 row-cols-md-1 mb-4 text-center justify-content-between">
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 font-weight-bold text-light bg-success">Medlemstilgang</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            <img src="{{ url_for('accesstokens.newMembersGraph') }}">
+            {{ url_for('accesstokens.newMembersGraph') }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row row-cols-1 row-cols-md-1 mb-4 text-center justify-content-between">
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Alle medlemmer</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            <img src="{{ url_for('accesstokens.memberAgesGraph') }}">
+            {{ url_for('accesstokens.memberAgesGraph') }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row row-cols-1 row-cols-md-1 mb-4 text-center justify-content-between">
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Kvinder</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            <img src="{{ url_for('accesstokens.memberAgesGraphFemale') }}">
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row row-cols-1 row-cols-md-1 mb-4 text-center justify-content-between">
+    <div class="col">
+      <div class="card mb-1 rounded-4 shadow-sm border-success">
+        <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Mænd</div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">
+            <img src="{{ url_for('accesstokens.memberAgesGraphMale') }}">
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- END CONTAINER -->
+
+
 {% endblock %}
