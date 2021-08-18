@@ -5,8 +5,8 @@ from logging.config import dictConfig
 # Create and configure the app
 app = Flask(__name__, instance_relative_config=True)
 
-REDIS_PORT = '6379'
-REDIS_HOST = 'localhost'
+#REDIS_PORT = os.environ.get('REDIS_PORT') # '6379'
+#REDIS_HOST = 'localhost'
 SESSION_TYPE = 'redis'
 app.config.from_object(__name__)
 
