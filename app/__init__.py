@@ -1,12 +1,15 @@
 import os
+import redis
 from flask import Flask, session
 from flask_session import Session
 from logging.config import dictConfig
 # Create and configure the app
 app = Flask(__name__, instance_relative_config=True)
 
-REDIS_PORT = os.environ.get('REDIS_PORT') # '6379'
-REDIS_HOST = 'localhost'
+#REDIS_PORT = os.environ.get('REDIS_PORT') # '6379'
+REDIS_URL = os.environ.get('REDIS_URL')
+
+SESSION_REDIS = redis.from_url(REDIS_URL)
 SESSION_TYPE = 'redis'
 app.config.from_object(__name__)
 
