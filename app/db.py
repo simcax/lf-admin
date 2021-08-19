@@ -12,8 +12,8 @@ def get_conn():
         dbPass = environ.get("DB_PASS")
         dbHost = environ.get("DB_HOST","cockroachdb-public")
         dbName = "lfadmin"
-        connString = "postgresql://{}@{}:26257/{}?sslmode=disable".format(dbUser, dbHost, dbName)
-        g.conn = psycopg2.connect(connString)
+        DATABASE_URL = "postgresql://{}@{}:26257/{}?sslmode=disable".format(dbUser, dbHost, dbName)
+        g.conn = psycopg2.connect(DATABASE_URL)
 
     return g.conn
 
