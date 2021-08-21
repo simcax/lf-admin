@@ -4,3 +4,4 @@ venv
 run_*.sh
 start_*.sh
 .vscode/*
+cockroach/nohup.out
