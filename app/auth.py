@@ -1,5 +1,7 @@
 import functools
-
+import os
+import requests
+import json
 
 from flask import(
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -51,27 +53,42 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_conn()
-        error = None
-        with db.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(
-                "SELECT * FROM soc.user WHERE username = '{}'".format(username)
-            )
-            user = cur.fetchone()
 
-        if cur.rowcount == 0:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-
+        error, r = lfUserLogin(username, password)
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            userData = json.loads(r.text)
+            session['user_id'] = userData['id']
+            session['user_name'] = "{} {}".format(userData['first_name'], userData['last_name'] )
+            session['user_email'] = userData['email']
             return redirect(url_for('accesstokens.index'))
 
         flash(error)
 
     return render_template('auth/login.html', hostname=hostname)
+
+def lfUserLogin(username, password):
+    r = apiPass = os.environ.get('API_PASSWORD')
+    apiUser = os.environ.get('API_USERNAME')
+    loginData = {
+            "credentials": {
+                "username": username,
+                "password": password,
+                "field": "email"
+            }
+        }
+
+    url = 'https://foreninglet.dk/api/memberlogin?version=1'
+    error = None
+    try:
+        r = requests.post(url,auth=(apiUser, apiPass), json=loginData)
+        if r.status_code != 200:
+            data = json.loads(r.text)
+            id = data['id']
+            error = 'Incorrect username or password.<br>Status code: {}'.format(r.status_code)    
+    except requests.exceptions.RequestException as e:
+        raise(SystemExit(e))
+    return error,r
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -80,11 +97,23 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        db = get_conn()
+        apiPass = os.environ.get('API_PASSWORD')
+        apiUser = os.environ.get('API_USERNAME')
+        url = 'https://foreninglet.dk/api/members?version=1'
+        try:
+            r = requests.get(url,auth=(apiUser, apiPass))
+            users = json.loads(r.text)
+            for user in users:
+                if user['MemberId'] == user_id:
+                    g.user = user['MemberId']
+                    break
+        except requests.exceptions.RequestException as e:
+            raise(SystemExit(e))
+        #db = get_conn()
 
-        with db.cursor() as cur:
-            cur.execute("SELECT * FROM soc.user WHERE id = '{}'".format(user_id))
-            g.user = cur.fetchone()[0]
+        #with db.cursor() as cur:
+        #    cur.execute("SELECT * FROM soc.user WHERE id = '{}'".format(user_id))
+        #    g.user = cur.fetchone()[0]
 
 @bp.route('/logout')
 def logout():
