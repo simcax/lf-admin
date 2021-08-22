@@ -16,7 +16,7 @@
     $('.toast').toast('show');
   });</script>
   <!-- <link rel="stylesheet" href="{{ url_for('static', filename='radio-buttons-colored.css') }}"> -->
-<title>{% block title %}{% endblock %}</title>
+<title>Lejre Fitness - Admin page</title>
 </head>
 <body>
 <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
@@ -26,9 +26,6 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
   {% block content %}{% endblock %}
 </section>
 </body>

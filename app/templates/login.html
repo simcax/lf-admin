@@ -1,0 +1,27 @@
+<ul class="nav justify-content-end">
+    <li class="nav justify-content-end">
+        <form method="post">
+            <div class="row">
+                <div class="col">
+                    <input name="username" placeholder="Username" class="form-control"  id="username" required>
+                </div>
+                <div class="col">
+                    <input type="password" placeholder="password" class="form-control" name="password" id="password" required aria-describedby="loginError">         
+                    
+                
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col3">{% for message in get_flashed_messages(category_filter=["login_error"]) %}
+                    <div id="loginError" class="flash text-danger">{{ message }}</div>
+                    {% endfor %}</div>
+
+            </div>
+            
+    </li>
+</ul>    
+    
+  </form>

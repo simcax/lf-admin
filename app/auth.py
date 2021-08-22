@@ -63,7 +63,8 @@ def login():
             session['user_email'] = userData['email']
             return redirect(url_for('accesstokens.index'))
 
-        flash(error)
+        flash(error,'login_error')
+
 
     return render_template('auth/login.html', hostname=hostname)
 
@@ -84,8 +85,7 @@ def lfUserLogin(username, password):
         r = requests.post(url,auth=(apiUser, apiPass), json=loginData)
         if r.status_code != 200:
             data = json.loads(r.text)
-            id = data['id']
-            error = 'Incorrect username or password.<br>Status code: {}'.format(r.status_code)    
+            error = 'Incorrect username or password.'
     except requests.exceptions.RequestException as e:
         raise(SystemExit(e))
     return error,r
@@ -105,7 +105,7 @@ def load_logged_in_user():
             users = json.loads(r.text)
             for user in users:
                 if user['MemberId'] == user_id:
-                    g.user = user['MemberId']
+                    g.user = user
                     break
         except requests.exceptions.RequestException as e:
             raise(SystemExit(e))
