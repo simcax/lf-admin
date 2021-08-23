@@ -24,6 +24,8 @@ app.register_blueprint(auth.bp)
 
 from . import accesstokens
 app.register_blueprint(accesstokens.bp)
+from . import member
+app.register_blueprint(member.bp)
 app.add_url_rule('/', endpoint='accesstokens.index')
 
 #    return app
