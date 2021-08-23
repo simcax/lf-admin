@@ -5,16 +5,23 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
 {% if request.url_rule.endpoint == 'accesstokens.membersNoTokens' %}
     
     {% for memberId in orderedMembers['realMembersWithoutTokens'] %}
-        {{ orderedMembers['realMembersWithoutTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['LastName'] }}<br/>
+    <div class="row">
+        <a href="/member/show/{{ memberId }}" class="fs-4 link-info"><i class="bi bi-file-earmark-person"></i>
+        {{ orderedMembers['realMembersWithoutTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithoutTokens'][memberId]['LastName'] }}
+    </a>
+    </div>
     {% endfor %}
 {% endif %}
 {% if request.url_rule.endpoint == 'accesstokens.membersWithTokens' %}
     {% for memberId in orderedMembers['realMembersWithTokens'] %}
+    <div class="row">
     {{ orderedMembers['realMembersWithTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['LastName'] }}<br/>
+    </div>
     {% endfor %}
 {% endif %}
-
+</div>
 {% endblock %}

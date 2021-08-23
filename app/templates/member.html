@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Member {{ member.id }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+</div class="row">
+    <div class="col">Member ID</div>
+    <div class="col">{{ member.MemberId }}</div>
+</div>
+</div>
+{% endblock %}

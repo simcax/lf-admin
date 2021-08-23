@@ -16,23 +16,6 @@ app.config.from_object(__name__)
 # Start the server side session
 Session(app)
 
-
-
-  
-# ensure the instance folder exists
-try:
-    os.makedirs(app.instance_path)
-except OSError:
-    pass
-
-@app.route('/hello')
-def home():
-    print(app.config['SECRET_KEY'])
-    print(app.config)
-    session['test'] = "Hello"
-    return "Hello!"
-
-
 from . import db
 db.init_app(app)
 
@@ -41,6 +24,8 @@ app.register_blueprint(auth.bp)
 
 from . import accesstokens
 app.register_blueprint(accesstokens.bp)
+from . import member
+app.register_blueprint(member.bp)
 app.add_url_rule('/', endpoint='accesstokens.index')
 
 #    return app

@@ -109,16 +109,20 @@ def memberAgesGraphFemale():
 def memberAgesGraphMale():
     _membersCached()
     memberStats = session['orderedMembers']['memberAgesMale']
-    app.logger.info(memberStats)
-    ages = list()
-    count = list()
+    #app.logger.info(memberStats)
+    ages = []
+    count = []
     for age, memberCount in memberStats.items():
         ages.append(age)
         count.append(memberCount)
     maleMembersImg = BytesIO
     mg = makeGraphs
     img = mg.makeGraphs.createXYGraph(count,ages,"Aldersfordeling Mænd","Alder","Antal")
-    return send_file(img, mimetype='image/png')
+    response = make_response(img)
+    response.headers.set('Content-Type', 'image/jpeg')
+    response.headers.set(
+        'Content-Disposition', 'attachment', filename='malemembers.jpg')
+    return response
 
 @bp.route('/resignedMembers')
 def resignedMembers():
@@ -186,9 +190,9 @@ def _orderMembers(members):
     first = today.replace(day=1)
     curMonth = first.strftime("%Y%m")
     lastMonth = first - datetime.timedelta(days=1)
-    app.logger.info("Last Month was:{} ".format(lastMonth))
+    #app.logger.info("Last Month was:{} ".format(lastMonth))
     prevMonth = lastMonth.strftime("%Y%m")
-    app.logger.info("Prev Month was:{} ".format(prevMonth))
+    #app.logger.info("Prev Month was:{} ".format(prevMonth))
     for member in membersDict:
         if member['GenuineMember'] == '1':
             realMembers[member['MemberId']] = member

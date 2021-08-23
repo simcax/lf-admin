@@ -25,6 +25,6 @@ class makeGraphs:
         fig.savefig(buf, format="png")
         #data = base64.b64encode(buf.getbuffer()).decode("ascii")
         data = base64.encodebytes(buf.getbuffer()).decode("ascii")
-        #return f"<img src='data:image/png;base64,{data}'/>"
-        return data
+        return f"<img src='data:image/png;base64,{data}'/>"
+        #return data
         #return data
