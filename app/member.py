@@ -3,6 +3,7 @@ from flask import (
 )
 bp = Blueprint('member', __name__,url_prefix='/member')
 from app import accesstokens
+from app.auth import login_required
 
 @bp.route('/show/<id>')
 @login_required
