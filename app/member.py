@@ -5,6 +5,7 @@ bp = Blueprint('member', __name__,url_prefix='/member')
 from app import accesstokens
 
 @bp.route('/show/<id>')
+@login_required
 def member(id):
     ordered = session['orderedMembers']['realMembers']
     return render_template('member.html', member=ordered[id])
