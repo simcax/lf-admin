@@ -28,6 +28,7 @@ def index():
     return render_template('tokens.html', orderedMembers=ordered, hostname=hostname)
 
 @bp.route('/realmembersnotoken')
+@login_required
 def membersNoTokens():
     # Check if member information has been cached in memory, if not retrieve them
     _membersCached()
@@ -35,6 +36,7 @@ def membersNoTokens():
     return render_template('members.html',orderedMembers=ordered, hostname=hostname)
 
 @bp.route('/realmemberswithtokens')
+@login_required
 def membersWithTokens():
     # Check if member information has been cached in memory, if not retrieve them
     _membersCached()
@@ -43,11 +45,13 @@ def membersWithTokens():
 
 
 @bp.route('/refreshData')
+@login_required
 def refreshMemberData():
     _membersCached(True)
     return redirect(url_for('accesstokens.index'))
 
 @bp.route('/newMembersGraph')
+@login_required
 def newMembersGraph():
     _membersCached()
     memberStats = session['orderedMembers']['memberStats']
@@ -72,6 +76,7 @@ def newMembersGraph():
     return img
 
 @bp.route('/memberAgesGraph')
+@login_required
 def memberAgesGraph():
     _membersCached()
     memberStats = session['orderedMembers']['memberAges']
@@ -91,6 +96,7 @@ def memberAgesGraph():
     return imageResponse
 
 @bp.route('/memberAgesGraphFemale')
+@login_required
 def memberAgesGraphFemale():
     _membersCached()
     memberStats = session['orderedMembers']['memberAgesFemale']
@@ -106,6 +112,7 @@ def memberAgesGraphFemale():
     return send_file(img, mimetype='image/png')
 
 @bp.route('/memberAgesGraphMale')
+@login_required
 def memberAgesGraphMale():
     _membersCached()
     memberStats = session['orderedMembers']['memberAgesMale']
@@ -125,6 +132,7 @@ def memberAgesGraphMale():
     return response
 
 @bp.route('/resignedMembers')
+@login_required
 def resignedMembers():
     apiPass = os.environ.get('API_PASSWORD')
     apiUser = os.environ.get('API_USERNAME')
