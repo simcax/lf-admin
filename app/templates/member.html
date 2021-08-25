@@ -1,14 +1,64 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Member {{ member.id }}{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
+
+
+
 <div class="container">
-</div class="row">
-    <div class="col">Member ID</div>
-    <div class="col">{{ member.MemberId }}</div>
+    <div class="card rounded-4 shadow-sm border-success" style="width: 35rem;">
+        <h5 class="card-header text-light bg-success">{{ member.FirstName }} {{ member.LastName }}
+            {% if (member.Saldo != '0.00') and (member.Saldo != 0) %}
+            <span class="position-absolute top-2 start-110 translate-middle badge rounded-pill bg-danger">
+                Saldo: {{ member.Saldo }}
+            </span>
+            {% endif %}                    
+          </h5>
+        <div class="card-body">
+            
+            <h6 class="card-subtitle mb-2">Medlem siden: {{ member.EnrollmentDate }}</h6>
+            <div class="row">
+                <div class="col">Adresse</div>
+                <div class="col">{{ member.Address }}</div>
+            </div>
+            <div class="row">
+                <div class="col">Postnummer / By</div>
+                <div class="col">{{ member.Zip }} {{ member.City }}</div>
+            </div>
+            <div class="row">
+                <div class="col">E-mail</div>
+                <div class="col"><a href="mailto:{{ member.Email }}">{{ member.Email }}</a></div>
+            </div>
+            {% if member.Phone %}
+            <div class="row">
+                <div class="col">Telefon</div>
+                <div class="col">{{ member.Phone }}</a></div>
+            </div>
+            {% endif %}
+            {% if member.Mobile %}
+            <div class="row">
+                <div class="col">Mobil</div>
+                <div class="col">{{ member.Mobile }}</a></div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col">Saldo</div>
+                <div class="col">{{ member.Saldo }}</div>
+            </div>
+            <div class="row">
+                <div class="col">Fødselsdag</div>
+                <div class="col">{{ member.Birthday }}</div>
+            </div>
+            <div class="row">
+                <div class="col">Member ID</div>
+                <div class="col">{{ member.MemberId }}</div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <a href="{{ url_for('accesstokens.membersNoTokens') }}" class="btn btn-success">Tilbage</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
 {% endblock %}
