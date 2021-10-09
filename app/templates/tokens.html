@@ -76,8 +76,10 @@
         <div class="card-header py-2 font-weight-bold text-light bg-success">Medlemstilgang</div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
+            <a href="{{ url_for('accesstokens.newMembersGraph') }}" target="_blank">
             <img src="{{ url_for('accesstokens.newMembersGraph') }}">
-            {{ url_for('accesstokens.newMembersGraph') }}
+          </a>
+            
           </h1>
         </div>
       </div>
@@ -89,8 +91,9 @@
         <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Alle medlemmer</div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
+            <a href="{{ url_for('accesstokens.memberAgesGraph') }}" target="_blank">
             <img src="{{ url_for('accesstokens.memberAgesGraph') }}">
-            {{ url_for('accesstokens.memberAgesGraph') }}
+            </a>
           </h1>
         </div>
       </div>
@@ -102,7 +105,9 @@
         <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Kvinder</div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
+            <a href="{{ url_for('accesstokens.memberAgesGraphFemale') }}" target="_blank">
             <img src="{{ url_for('accesstokens.memberAgesGraphFemale') }}">
+            </a>
           </h1>
         </div>
       </div>
@@ -114,7 +119,9 @@
         <div class="card-header py-2 font-weight-bold text-light bg-success">Aldersfordeling - Mænd</div>
         <div class="card-body">
           <h1 class="card-title pricing-card-title">
+            <a href="{{ url_for('accesstokens.memberAgesGraphMale') }}" target="_blank">
             <img src="{{ url_for('accesstokens.memberAgesGraphMale') }}">
+            </a>
           </h1>
         </div>
       </div>

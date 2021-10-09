@@ -2,13 +2,14 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session, send_file
 )
 from flask.helpers import make_response
+from matplotlib.pyplot import xlabel
 from werkzeug.exceptions import abort
 from werkzeug.wrappers import response
 
 from app import app
 from app.auth import login_required
 from app.db import get_conn
-from app.graph import makeGraphs
+from app.graph import graphPygal, makeGraphs
 
 bp = Blueprint('accesstokens', __name__,url_prefix='/tokens')
 import os
@@ -50,86 +51,54 @@ def refreshMemberData():
     _membersCached(True)
     return redirect(url_for('accesstokens.index'))
 
+@bp.route('/testgraph')
+def testgraph():
+    from app.graph import graphPygal
+    _membersCached()
+    memberStats = session['orderedMembers']['memberStatsByYear']
+    return graphPygal.makeGraphYearByYear("Medlemstilgang", "Antal", "måned for måned", memberStats)
+
 @bp.route('/newMembersGraph')
 @login_required
 def newMembersGraph():
+    from app.graph import graphPygal
     _membersCached()
-    memberStats = session['orderedMembers']['memberStats']
-    months = list()
-    members = list()
-    for month, memberCount in memberStats.items():
-        months.append(month)
-        members.append(memberCount)
-    #plt.figure(figsize=(10,4))
-    #plt.bar(months, members)
-    #plt.title("Medlemstilgang (aktive medlemmer)")
-    #plt.xlabel('Måned')
-    #plt.ylabel('Medlemmer')
-    #img = BytesIO()
-    #plt.savefig(img)
-    #img.seek(0)
-    #plt.show()
-    newMembersImg = BytesIO
-    mg = makeGraphs
-    img = mg.makeGraphs.createXYGraph(members,months,"Medlemstilgang","Måned","Medlemmer")
-    
-    return img
+    memberStats = session['orderedMembers']['memberStatsByYear']
+    return graphPygal.makeGraphYearByYear("Medlemstilgang", "Antal", "måned for måned", memberStats)
 
 @bp.route('/memberAgesGraph')
 @login_required
 def memberAgesGraph():
     _membersCached()
     memberStats = session['orderedMembers']['memberAges']
-    app.logger.info(memberStats)
-    ages = list()
-    count = list()
-    for age, memberCount in memberStats.items():
-        ages.append(age)
-        count.append(memberCount)
-    membersAgeImg = BytesIO
-    mg = makeGraphs
-    imgsrc = mg.makeGraphs.createXYGraph(count,ages,"Aldersfordeling","Alder","Antal")
-    imageResponse = make_response(send_file(imgsrc, mimetype="image/png;base64"))
-    imageResponse.headers.set('Content-Transfer-Encoding','base64')
-    
-    #return render_template('graph.html', graph= imgsrc)
-    return imageResponse
+    app.logger.info(f"Making members age graph with data {memberStats}")
+    values, xLabels = [],[]
+    for key, value in sorted(memberStats.items()):
+        values.append(value)
+        xLabels.append(str(key))
+    return graphPygal.makeGraph("Medlemsalder","Antal", xLabels,values, "Alder")
 
 @bp.route('/memberAgesGraphFemale')
 @login_required
 def memberAgesGraphFemale():
     _membersCached()
     memberStats = session['orderedMembers']['memberAgesFemale']
-    app.logger.info(memberStats)
-    ages = list()
-    count = list()
-    for age, memberCount in memberStats.items():
+    ages, count = [],[]
+    for age, memberCount in sorted(memberStats.items()):
         ages.append(age)
         count.append(memberCount)
-    femaleMembersImg = BytesIO
-    mg = makeGraphs
-    img = mg.makeGraphs.createXYGraph(count,ages,"Aldersfordeling Kvinder","Alder","Antal")
-    return send_file(img, mimetype='image/png')
-
+    return graphPygal.makeGraph("Aldersfordeling Kvinder","Antal", ages, count, "Alder")
+    
 @bp.route('/memberAgesGraphMale')
 @login_required
 def memberAgesGraphMale():
     _membersCached()
     memberStats = session['orderedMembers']['memberAgesMale']
-    #app.logger.info(memberStats)
-    ages = []
-    count = []
-    for age, memberCount in memberStats.items():
+    ages, count = [], []
+    for age, memberCount in sorted(memberStats.items()):
         ages.append(age)
         count.append(memberCount)
-    maleMembersImg = BytesIO
-    mg = makeGraphs
-    img = mg.makeGraphs.createXYGraph(count,ages,"Aldersfordeling Mænd","Alder","Antal")
-    response = make_response(img)
-    response.headers.set('Content-Type', 'image/jpeg')
-    response.headers.set(
-        'Content-Disposition', 'attachment', filename='malemembers.jpg')
-    return response
+    return graphPygal.makeGraph("Aldersfordeling Mænd","Antal", ages, count, "Alder")
 
 @bp.route('/resignedMembers')
 @login_required
@@ -146,6 +115,7 @@ def resignedMembers():
 def _membersCached(refresh=False):
     if session.get('orderedMembers') and refresh == False:
         print("Members are cached. Not retrieving them again")
+        g.lastDataRetrieval = session.get('lastDataRetrieval')
     else:
         print("Members were not cached. Retrieving them")
         apiPass = os.environ.get('API_PASSWORD')
@@ -153,7 +123,9 @@ def _membersCached(refresh=False):
         response = _getMembers(apiUser, apiPass)
         ordered = _orderMembers(response.text)
         session['orderedMembers'] = ordered
-
+        rt = datetime.datetime.now()
+        session['lastDataRetrieval'] = rt.strftime("%b %d %Y %H:%M")
+        g.lastDataRetrieval = session.get('lastDataRetrieval')
 
 def _getResignedMembers(apiUser, apiPass):
     url = 'https://foreninglet.dk/api/members/status/resigned?version=1'
@@ -188,6 +160,7 @@ def _orderMembers(members):
     notRealMembers = dict()
     returnOrdered = dict()
     memberStats = dict()
+    memberStats2 = dict()
     memberGender = dict()
     memberStatsTexts = dict()
     interestingNumber = dict()
@@ -241,6 +214,7 @@ def _orderMembers(members):
 
             joinDate = datetime.datetime.strptime(member['EnrollmentDate'],'%Y-%m-%d')
             year = joinDate.year
+            joinMonth = "{}".format(joinDate.month)
             yearmonth = "{}{:02d}".format(joinDate.year, joinDate.month)
             memberStatsTexts[yearmonth] = joinDate.strftime("%Y %B")
             
@@ -254,6 +228,18 @@ def _orderMembers(members):
                 memberStats[yearmonth] += 1
             else:
                 memberStats[yearmonth] = 1
+            
+            if memberStats2.get(year):
+                thatYear = memberStats2.get(year)
+                if thatYear.get(joinMonth):
+                    monthCount = thatYear.get(joinMonth) +1
+                    memberStats2[year].update( { joinMonth: monthCount})
+                else:
+                    memberStats2[year].update({joinMonth: 1})
+            else:
+                memberStats2[year] = { joinMonth: 1 }
+                
+
                 
         else:
             notRealMembers[member['MemberId']] = member
@@ -278,6 +264,7 @@ def _orderMembers(members):
     returnOrdered['realMembersWithoutTokens'] = realMembersWithoutTokens
     returnOrdered['realMembersWithTokens'] = realMembersWithTokens
     returnOrdered['memberStats'] = memberStats
+    returnOrdered['memberStatsByYear'] = memberStats2
     returnOrdered['memberGender'] = memberGender
     returnOrdered['memberStatsTexts'] = memberStatsTexts
     returnOrdered['interestingNumbers'] = interestingNumber
