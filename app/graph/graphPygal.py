@@ -65,7 +65,7 @@ def makeGraphYearByYear(graphTitle, yTitle, xLabels, data):
         october = thisYear.get('10',None)
         november = thisYear.get('11',None)
         december = thisYear.get('12',None)
-        values = [ { 'value':january, 'label': str(january)}, february, march, april, may, june, july, { 'value': august, 'label': str(august)}, september, october, november, december]
+        values = [ january, february, march, april, may, june, july, august, september, october, november, december]
         legend = str(year)
         print(f"Adding Legend {legend} with values {values}")
         c.add(legend, values)
@@ -74,7 +74,7 @@ def makeGraphYearByYear(graphTitle, yTitle, xLabels, data):
     #c.add('Others', df['others'])
 
     # Define the X-labels
-    c.x_labels = 'Jan','Feb','Mar','Apr','Jun','Jul','Aug','Sep','Okt','Nov','Dec'
+    c.x_labels = 'Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt','Nov','Dec'
 
     # Write this to an SVG file
     #c.render_to_file('pygal.svg')
