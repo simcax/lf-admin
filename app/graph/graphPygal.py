@@ -1,4 +1,3 @@
-from matplotlib.pyplot import title
 import pygal
 
 from pygal.style import Style

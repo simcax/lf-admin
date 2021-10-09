@@ -2,14 +2,13 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session, send_file
 )
 from flask.helpers import make_response
-from matplotlib.pyplot import xlabel
 from werkzeug.exceptions import abort
 from werkzeug.wrappers import response
 
 from app import app
 from app.auth import login_required
 from app.db import get_conn
-from app.graph import graphPygal, makeGraphs
+from app.graph import graphPygal
 
 bp = Blueprint('accesstokens', __name__,url_prefix='/tokens')
 import os
