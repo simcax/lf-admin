@@ -1,21 +1,33 @@
+from datetime import date
+import datetime
 import os
 import redis
 from flask import Flask, session
 from flask_session import Session
 from logging.config import dictConfig
 # Create and configure the app
-app = Flask(__name__, instance_relative_config=True)
-
+app = Flask(__name__ )#, instance_relative_config=True)
+app.secret_key = b'3!K2lhkTbjPYda%ct#b9'
 #REDIS_PORT = os.environ.get('REDIS_PORT') # '6379'
-REDIS_URL = os.environ.get('REDIS_URL')
+#REDIS_URL = os.environ.get('REDIS_URL')
 
-SESSION_REDIS = redis.from_url(REDIS_URL)
-SESSION_TYPE = 'redis'
-app.config.from_object(__name__)
-
+#SESSION_REDIS = redis.from_url(REDIS_URL)
+#SESSION_TYPE = os.environ.get('SESSION_TYPE') #'redis'
+#app.config.from_object(__name__)
+app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
+app.config['SESSION_PERMANENT'] = True
+#app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_REDIS'] = redis.from_url(os.environ.get('REDIS_URL'))
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_DOMAIN'] = os.environ.get('COOKIE_DOMAIN')
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME')
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
 # Start the server side session
 Session(app)
-
+print(app.config)
+print(app.config['SESSION_REDIS'])
 from . import db
 db.init_app(app)
 
@@ -27,6 +39,12 @@ app.register_blueprint(accesstokens.bp)
 from . import member
 app.register_blueprint(member.bp)
 app.add_url_rule('/', endpoint='accesstokens.index')
+
+# Let's make sessions permanent, if site is visited every 5 days
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(days=5)
 
 #    return app
 
