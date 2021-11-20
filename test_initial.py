@@ -1,6 +1,18 @@
 import pytest
 
-def test_init():
-    # Let's just try an import the app
-    from app import app
-    assert app is not None
+from app import app
+
+@pytest.fixture
+def client():
+    with app.test_client() as client:
+        
+        with app.app_context(): 
+            # None
+            temp = 1
+        yield client
+
+def test_root_endpoint(client):
+    '''Test for the / endpoint'''
+    rv = client.get('/', follow_redirects=True)
+    assert rv.status_code == 200
+    assert rv.data != None

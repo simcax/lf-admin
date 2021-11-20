@@ -14,15 +14,15 @@ app.secret_key = b'3!K2lhkTbjPYda%ct#b9'
 #SESSION_REDIS = redis.from_url(REDIS_URL)
 #SESSION_TYPE = os.environ.get('SESSION_TYPE') #'redis'
 #app.config.from_object(__name__)
-app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
+app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE','redis')
 app.config['SESSION_PERMANENT'] = True
 #app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_REDIS'] = redis.from_url(os.environ.get('REDIS_URL','redis://localhost:6379'))
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_DOMAIN'] = os.environ.get('COOKIE_DOMAIN')
+app.config['SESSION_COOKIE_DOMAIN'] = os.environ.get('COOKIE_DOMAIN','127.0.0.1')
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME')
+app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME','lf-admin-dev')
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
 # Start the server side session
 Session(app)
