@@ -144,11 +144,14 @@ def _getMembers(apiUser, apiPass):
         raise(SystemExit(e))
 
 def _calculateAge(date):
-    birthdate = datetime.datetime.strptime(date, '%Y-%m-%d')
-    endDate = datetime.datetime.today()
-    timeDifference = endDate - birthdate
-    ageDays = timeDifference.days
-    ageYears = int(ageDays / 365)
+    if date:
+        birthdate = datetime.datetime.strptime(date, '%Y-%m-%d')
+        endDate = datetime.datetime.today()
+        timeDifference = endDate - birthdate
+        ageDays = timeDifference.days
+        ageYears = int(ageDays / 365)
+    else:
+        ageYears = 0
     return ageYears
 
 def _orderMembers(members):
