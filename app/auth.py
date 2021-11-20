@@ -99,6 +99,8 @@ def load_logged_in_user():
     else:
         apiPass = os.environ.get('API_PASSWORD')
         apiUser = os.environ.get('API_USERNAME')
+        if not apiPass or not apiUser:
+            raise("Missing API Credentials") 
         url = 'https://foreninglet.dk/api/members?version=1'
         try:
             r = requests.get(url,auth=(apiUser, apiPass))
