@@ -51,7 +51,7 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    app.logger("Login endpoint called")
+    logger.info("Login endpoint called")
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
