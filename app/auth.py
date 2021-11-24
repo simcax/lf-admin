@@ -8,6 +8,7 @@ from flask import(
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from app import logger
 from app.db import get_conn
 from psycopg2.extras import RealDictCursor
 import socket
@@ -50,6 +51,7 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    app.logger("Login endpoint called")
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
