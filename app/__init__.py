@@ -25,7 +25,7 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_DOMAIN'] = os.environ.get('COOKIE_DOMAIN','127.0.0.1')
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME','lf-admin-dev')
-app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=6)
 # Start the server side session
 Session(app)
 from . import db
