@@ -22,6 +22,7 @@ hostname = socket.gethostname()
 @bp.route('/')
 @login_required
 def index():
+    app.logger.info("Index loaded.")
     # Get all members
     _membersCached()
     ordered = session['orderedMembers']

@@ -4,10 +4,12 @@ import os
 import redis
 from flask import Flask, session
 from flask_session import Session
-from logging.config import dictConfig
+from dotenv import load_dotenv
+load_dotenv()
 # Create and configure the app
 app = Flask(__name__ )#, instance_relative_config=True)
 app.secret_key = b'3!K2lhkTbjPYda%ct#b9'
+#app.secret_key = os.environ.get('SECRET_KEY')
 #REDIS_PORT = os.environ.get('REDIS_PORT') # '6379'
 #REDIS_URL = os.environ.get('REDIS_URL')
 
@@ -26,8 +28,6 @@ app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME','lf-admin-de
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
 # Start the server side session
 Session(app)
-print(app.config)
-print(app.config['SESSION_REDIS'])
 from . import db
 db.init_app(app)
 

@@ -8,7 +8,7 @@ from flask import(
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import logger
+from app import app
 from app.db import get_conn
 from psycopg2.extras import RealDictCursor
 import socket
@@ -51,7 +51,9 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    logger.info("Login endpoint called")
+    app.logger.info("/login loaded.")
+    app.logger.info(session)
+    app.logger.info(session.get('user_id'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -63,6 +65,7 @@ def login():
             session['user_id'] = userData['id']
             session['user_name'] = "{} {}".format(userData['first_name'], userData['last_name'] )
             session['user_email'] = userData['email']
+            app.logger.info("User %s logged in. redirecting to index page.", username)
             return redirect(url_for('accesstokens.index'))
 
         flash(error,'login_error')
@@ -71,25 +74,32 @@ def login():
     return render_template('auth/login.html', hostname=hostname)
 
 def lfUserLogin(username, password):
-    r = apiPass = os.environ.get('API_PASSWORD')
+    apiPass = os.environ.get('API_PASSWORD')
     apiUser = os.environ.get('API_USERNAME')
-    loginData = {
-            "credentials": {
-                "username": username,
-                "password": password,
-                "field": "email"
+    if apiUser and apiPass:
+        loginData = {
+                "credentials": {
+                    "username": username,
+                    "password": password,
+                    "field": "email"
+                }
             }
-        }
 
-    url = 'https://foreninglet.dk/api/memberlogin?version=1'
-    error = None
-    try:
-        r = requests.post(url,auth=(apiUser, apiPass), json=loginData)
-        if r.status_code != 200:
-            data = json.loads(r.text)
-            error = 'Incorrect username or password.'
-    except requests.exceptions.RequestException as e:
-        raise(SystemExit(e))
+        url = 'https://foreninglet.dk/api/memberlogin?version=1'
+        error = None
+        try:
+            r = requests.post(url,auth=(apiUser, apiPass), json=loginData)
+            app.logger.info("API Login succeeded for %s", username)
+            if r.status_code != 200:
+                data = json.loads(r.text)
+                error = 'Incorrect username or password.'
+                app.logger.info(error)
+        except requests.exceptions.RequestException as e:
+            raise(SystemExit(e))
+    else:
+        error = "Api username or password not set."
+        r = "No data retrieved."
+        app.logger.error(error)
     return error,r
 
 @bp.before_app_request
