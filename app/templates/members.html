@@ -31,8 +31,23 @@
 {% endif %}
 {% if request.url_rule.endpoint == 'accesstokens.membersWithTokens' %}
     {% for memberId in orderedMembers['realMembersWithTokens'] %}
-    <div class="row">
-    {{ orderedMembers['realMembersWithTokens'][memberId]['MemberNumber'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['LastName'] }}<br/>
+    <div class="card rounded-4 shadow-sm border-success" style="width: 50rem;">
+        <div class="row">
+            <div class="col">
+                <a href="/member/show/{{ memberId }}" class="fs-4 link-info"><i class="bi bi-file-earmark-person"></i></a>
+                {{ orderedMembers['realMembersWithTokens'][memberId]['MemberNumber'] }}
+            </div>
+            <div class="col">
+                {{ orderedMembers['realMembersWithTokens'][memberId]['FirstName'] }} {{ orderedMembers['realMembersWithTokens'][memberId]['LastName'] }}
+            </div>
+            <div class="col">
+                {% if ( orderedMembers['realMembersWithTokens'][memberId]['Saldo'] != '0' ) and ( orderedMembers['realMembersWithTokens'][memberId]['Saldo'] != '0.00' ) %}
+                <span class="badge bg-danger translate-middle text-light rounded-pill">
+                    {{ orderedMembers['realMembersWithTokens'][memberId]['Saldo'] }}
+                </span>
+                {% endif %}
+            </div>
+        </div>    
     </div>
     {% endfor %}
 {% endif %}
