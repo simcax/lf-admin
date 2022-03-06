@@ -51,7 +51,7 @@ def makeGraphYearByYear(graphTitle, yTitle, xLabels, data):
     
     for year in data.keys():
         thisYear = data[year]
-        print("This year {}".format(thisYear))
+        print(f"This year {thisYear}")
         print("May: {}".format(data[year].get("5")))
         january = thisYear.get('1',None)
         february = thisYear.get('2',None)
