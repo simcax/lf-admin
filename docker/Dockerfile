@@ -1,6 +1,9 @@
-FROM python:3.9.4 
+FROM python:3.9.4
+LABEL maintainer="carsten@skov.codes"
 RUN apt update
+RUN apt install -y gunicorn3 gcc python3-dev libpq-dev
 # Upgrade pip 
+RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --upgrade pip
 RUN python -m venv /venv
 COPY ./requirements.txt /
@@ -12,10 +15,11 @@ ENV FLASK_APP=app
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY ./app /app
+COPY ./docker/config /config
 COPY ./docker/docker_entrypoint.sh /
 RUN chmod +x /docker_entrypoint.sh
 WORKDIR /
 EXPOSE 8000
 
 ENTRYPOINT [ "./docker_entrypoint.sh" ]
-CMD [ "flask", "run", "--host", "0.0.0.0", "--port", "8000" ]
+CMD [ "/venv/bin/gunicorn", "-c", "python:config.gunicorn", "app.app:app" ]
