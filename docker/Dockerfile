@@ -6,7 +6,7 @@ RUN apt install -y gunicorn3 gcc python3-dev libpq-dev
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --upgrade pip
 RUN python -m venv /venv
-COPY ./requirements.txt /
+COPY .docker/requirements.txt /
 RUN . venv/bin/activate && python -m pip install psycopg2 && python -m pip install -r requirements.txt
 ENV SESSION_TYPE=redis
 ENV REDIS_HOST=redis-lf-admin
