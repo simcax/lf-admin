@@ -15,6 +15,22 @@
     $(document).ready(function(){
     $('.toast').toast('show');
   });</script>
+  <script lang="javascript">
+    div#loading {
+      width: 35px;
+      height: 35px;
+      display: none;
+      background: url(/static/loadingimage.gif) no-repeat;
+      cursor: wait;
+      }
+  </script>
+  <script type="text/javascript">// <![CDATA[
+    function loading(){
+        $("#loading").show();
+        $("#content").hide();       
+    }
+  // ]]></script>
+
   <!-- <link rel="stylesheet" href="{{ url_for('static', filename='radio-buttons-colored.css') }}"> -->
 <title>Lejre Fitness - Admin page</title>
 </head>

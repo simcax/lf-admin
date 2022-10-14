@@ -183,6 +183,8 @@ def _orderMembers(members):
 
             # Get Age for the member:
             memberAge = _calculateAge(member['Birthday'])
+            if memberAge < 15 or memberAge >= 128:
+                app.logger.warning(f"Member {member['MemberId']} has wrong bithday: {member['Birthday']}")
             # Check to see if the accesstokenfield was filled
             if member['MemberField3']:
                 realMembersWithTokens[member['MemberId']] = member
