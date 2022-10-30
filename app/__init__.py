@@ -43,6 +43,9 @@ app.add_url_rule('/', endpoint='accesstokens.index')
 # Let's make sessions permanent, if site is visited every 5 days
 @app.before_request
 def make_session_permanent():
+    """
+        Make the session stick for at least 5 days.
+    """
     session.permanent = True
     app.permanent_session_lifetime = datetime.timedelta(days=5)
 
